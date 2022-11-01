@@ -1,0 +1,50 @@
+<html>
+  <head>
+  <base target="_top">
+  <script>
+
+    function myFunction() {
+      var username=document.getElementById("username").value;
+      var password=document.getElementById("pwd").value;
+      var fname=document.getElementById("fname").value;
+      var age=document.getElementById("age").value;
+      var gender=document.getElementById("gender").value;
+
+      /*var url = document.getElementById("url").value;
+      var link = document.createElement('a');
+      link.href = url+"?page=Login";
+      link.id = "linkURL";
+      document.body.appendChild(link);
+      document.getElementById("linkURL").click();
+      */
+      google.script.run.writeOneRecord(username, password, fname, age, gender);
+    }
+      
+    </script>
+  </head>
+
+
+  <body style="background-color:tan;">
+      <h1>Purdue Private Flights</h1>
+      <div class="create">
+        <h2> Create Login</h2>
+        <form>
+          <label for="username">Username:</label>
+          <input type="text" name="username" id="username"><br><br>
+          <label for="pwd">Password:</label>
+          <input type="text" name="pwd" id="pwd"><br><br>
+          <label for="fname">Full Name:</label>
+          <input type="text" name="fname" id="fname"><br><br>
+          <label for="age">Age:</label>
+          <input type="number" name="age" id="age" min="18" max="110"><br><br>
+          <label for="gender">Gender:</label>
+          <select name="gender" id="gender">
+            <option disabled selected value> -- select an option -- </option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select><br><br>
+          <input type="submit" onclick="myFunction()">
+        </form>
+      </div>
+   </body>
+</html>

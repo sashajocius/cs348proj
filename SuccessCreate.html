@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <script> 
+  function changePage(page) {
+    document.open();   //should work fine without this
+    document.write(page);
+    document.close();  //should work fine without this
+  }
+  </script>
+  <head>
+    <base target="_top">
+  </head>
+    <body style="background-color:tan;">
+      <h1>Purdue Private Flights</h1>
+      <div class=success>
+        <h2>You have successfully made an account!</h2>
+            <input type="button" value="Click here to continue" onclick="google.script.run.withSuccessHandler(changePage).newPage('Login')">
+          </a>
+      </div>
+  </body>
+</html>

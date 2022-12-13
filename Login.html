@@ -1,18 +1,48 @@
-<!DOCTYPE html>
+
+
 <html>
+  <script>
+  function changePage(page) {
+      document.open();   
+      document.write(page);
+      document.close(); 
+  }
+
+  </script>
   <head>
     <base target="_top">
+    <script>
+      function onSuccess(returnedValue) {
+        if (returnedValue == 1) {
+          google.script.run.withSuccessHandler(changePage).newPage('BookFlight')
+        } else {
+          alert("Incorrect username or password. Please try again.");
+        }
+    }
+      
+      function storeUser() {
+        var username=document.getElementById("username").value;
+        var password=document.getElementById("pwd").value;
+        localStorage.setItem('passengerID', username);
+        google.script.run.withSuccessHandler(onSuccess).login(username, password);
+
+      }
+    </script>
   </head>
 <body style="background-color:tan;">
       <h1>Purdue Private Flights</h1>
-      <div class="create">
-        <h2> Create Login</h2>
-        <form>
+      <div class="Log_on">
+        <h2>Login</h2>
           <label for="username">Username:</label>
           <input type="text" name="username" id="username"><br><br>
-          <label for="pwd">Password:</label>
+          <label type="pwd">Password:</label>
           <input type="text" name="pwd" id="pwd"><br><br>
-        </form>
+          <div class="btn-group">
+            <button onclick="google.script.run.withSuccessHandler(changePage).newPage('Index')">Back</button>
+            <button onclick="storeUser()">Submit</button>
+          </div>
+          </a>
       </div>
+
    </body>
 </html>

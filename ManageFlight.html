@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script>
+    function createHtml(flightHtml) {
+        var div = document.getElementById('allflights');
+        div.innerHTML += flightHtml;
+    }
+
+    function showFlights() {
+        const passenger = localStorage.getItem('passengerID');
+        google.script.run.withSuccessHandler(createHtml).readTrips(passenger);
+    }
+
+    function changePage(page) {
+      document.open();   
+      document.write(page);
+      document.close(); 
+    }
+    function tripUpdated(check) {
+    if (check == 1) {
+      google.script.run.withSuccessHandler(changePage).newPage('ManageFlight');
+    } else {
+      alert("Sorry there was an error changing your flight.");
+    }
+  }
+
+    function updateTrip(conf) {
+      var updatedBags = document.getElementById("newbags").value;
+      if (updatedBags != "") {
+        google.script.run.withSuccessHandler(tripUpdated).update(conf, updatedBags);
+      }
+  }
+
+    function tripDeleted(check) {
+      if (check == 1) {
+        google.script.run.withSuccessHandler(changePage).newPage('ManageFlight');
+      }else {
+        //alert("Confirmation number not found.");
+      }
+    }
+
+    function deleteTrip(confirmation) {
+      if (confirmation!= "") {
+	      google.script.run.withSuccessHandler(tripDeleted).deletetrip(confirmation);
+	    }  
+    }
+    </script>
+    <style>
+    body {
+      background-color:tan;
+      }
+    h2 {
+      text-align: center;
+    }
+    .topnav button2 {
+      background-color: black;
+      padding: .5em;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 6px;
+      color: white;
+      font-family: 'Oswald';
+      font-size: 20px;
+      text-decoration: none;
+      border: none;
+      }
+      .topnav button1 {
+      background-color: #ddd;
+      padding: .5em;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 6px;
+      color: white;
+      font-family: 'Oswald';
+      font-size: 20px;
+      text-decoration: none;
+      border: none;
+      }
+      .topnav button1:hover {
+        border: none;
+        color: black;
+        }
+    </style>
+  </head>
+  <body onload="showFlights()">
+    <h1>Purdue Private Flights</h1>
+    <div class="topnav">
+        <button1 onclick="google.script.run.withSuccessHandler(changePage).newPage('BookFlight')">Book a Flight</button1>
+        <button2>Manage Your Flights</button2>
+        
+    </div>
+    <h2>Your Flights</h2>
+
+    <div id="allflights">
+    </div>
+
+    <br><br><br>
+
+    <button onclick="google.script.run.withSuccessHandler(changePage).newPage('Index')">Logout</button>
+  </body>
+</html>

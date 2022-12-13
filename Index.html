@@ -2,24 +2,28 @@
   <head>
   <base target="_top">
   <script>
-
+    function onSuccess(returnedValue) {
+        if (returnedValue == 1) {
+          google.script.run.withSuccessHandler(changePage).newPage('SuccessCreate')
+        } else {
+          alert("This username is taken. Please choose a new one.");
+        }
+    }
     function myFunction() {
       var username=document.getElementById("username").value;
       var password=document.getElementById("pwd").value;
       var fname=document.getElementById("fname").value;
       var age=document.getElementById("age").value;
       var gender=document.getElementById("gender").value;
-
-      /*var url = document.getElementById("url").value;
-      var link = document.createElement('a');
-      link.href = url+"?page=Login";
-      link.id = "linkURL";
-      document.body.appendChild(link);
-      document.getElementById("linkURL").click();
-      */
-      google.script.run.writeOneRecord(username, password, fname, age, gender);
-    }
+      google.script.run.withSuccessHandler(onSuccess).insertPassenger(username, password, fname, age, gender);
       
+    }    
+
+    function changePage(page) {
+      document.open();   //should work fine without this
+      document.write(page);
+      document.close();  //should work fine without this
+    }
     </script>
   </head>
 
@@ -27,8 +31,7 @@
   <body style="background-color:tan;">
       <h1>Purdue Private Flights</h1>
       <div class="create">
-        <h2> Create Login</h2>
-        <form>
+        <h2> Create New Login</h2>
           <label for="username">Username:</label>
           <input type="text" name="username" id="username"><br><br>
           <label for="pwd">Password:</label>
@@ -43,8 +46,15 @@
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select><br><br>
+
           <input type="submit" onclick="myFunction()">
-        </form>
+          </a>
+      </div>
+
+      <div class="existing">
+        <h2> Already have a login? </h2>
+        <button onclick="google.script.run.withSuccessHandler(changePage).newPage('Login')">Sign In</button>
+
       </div>
    </body>
 </html>

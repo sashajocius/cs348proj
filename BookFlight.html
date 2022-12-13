@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <base target="_top">
+    <style>
+    .topnav button1 {
+      background-color: black;
+      padding: .5em;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 6px;
+      color: white;
+      font-family: 'Oswald';
+      font-size: 20px;
+      text-decoration: none;
+      border: none;
+      }
+      .topnav button2 {
+      background-color: #ddd;
+      padding: .5em;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 6px;
+      color: white;
+      font-family: 'Oswald';
+      font-size: 20px;
+      text-decoration: none;
+      border: none;
+      }
+      .topnav button2:hover {
+        border: none;
+        color: black;
+        }
+       
+      
+    </style>
+
+    <script>
+    function populateFlights(flightHtml) {
+        var div = document.getElementById('flights');
+        div.innerHTML = flightHtml;
+    }
+    function hideSelected() {
+      var select = document.getElementById("select");
+      if (select.value != "") {
+        var selected = document.getElementById("selected");
+        selected.style.display = 'none'
+        var selected = document.getElementById("available");
+        selected.style.display = 'block'
+        var destination = document.getElementById("select"); 
+        google.script.run.withSuccessHandler(populateFlights).readFlights(destination.value);
+        
+
+      }
+  }
+
+  function showSelected() {
+      var selected = document.getElementById("selected");
+      selected.style.display = 'block'
+      var selected = document.getElementById("available");
+      selected.style.display = 'none'
+      var div = document.getElementById('flights');
+      div.innerHTML = "";
+  }
+
+
+  function showConfirmation() {
+    const passenger = localStorage.getItem('passengerID');
+    var flightID = document.querySelector('input[name="foo"]:checked').value;
+    localStorage.setItem('flightID', flightID);
+    var passengerlabel = document.getElementById("passengerID");
+    var passengerHtml = "Passenger: \t" + passenger;
+    passengerlabel.innerHTML = passengerHtml;
+    var flightlabel = document.getElementById("flightID");
+    var flightHtml = "Flight: \t" + flightID;
+    flightlabel.innerHTML = flightHtml;
+    var available = document.getElementById("available");
+    available.style.display = "none";
+    var confirm = document.getElementById("confirmation");
+    confirm.style.display = "block";
+  }
+  function changePage(page) {
+    document.open();   
+    document.write(page);
+    document.close(); 
+  }
+
+  function success(destinationHtml) {
+    destinationHtml = '<option value="" disabled selected> --select an option-- </option> ' + destinationHtml;
+    var div = document.getElementById('select');
+    div.innerHTML = destinationHtml;
+  }
+
+  function back() {
+    var available = document.getElementById("available");
+    available.style.display = "block";
+    var confirm = document.getElementById("confirmation");
+    confirm.style.display = "none";
+  }
+  function tripCreated(check) {
+    if (check == 1) {
+      var confirm = document.getElementById("confirmation");
+      confirm.style.display = "none";
+      var confirmed = document.getElementById("confirmed");
+      confirmed.style.display = "block";
+    } else {
+      alert("Sorry there was an error booking your flight.")
+    }
+  }
+  function createTrip() {
+    const passenger = localStorage.getItem('passengerID');
+    const flight = localStorage.getItem('flightID');
+    var bags = document.getElementById("numbags").value;
+    google.script.run.withSuccessHandler(tripCreated).trip(passenger, flight, bags);
+  }
+    </script>
+  </head>
+  <body style="background-color:tan;" onload="google.script.run.withSuccessHandler(success).readDestinations()">
+      <h1>Purdue Private Flights</h1>
+      <div class="topnav">
+        <button1>Book a Flight</button1>
+        <button2 onclick="google.script.run.withSuccessHandler(changePage).newPage('ManageFlight')">Manage Your Flights</button2>
+        
+    </div>
+    
+    <div id="selected">
+      <h2>Please select a destination...</h2>
+      <select id=select>
+      </select>
+      <button onclick="hideSelected()">Find Flights</button>
+    
+      
+    </div>
+    <div id="available" style="display:none">
+    <h2>Please choose a flight... </h2>
+    <label id = flights></label>
+
+    <br><br>
+    <div class="btn-group">
+      <button onclick="showSelected()">Back</button>
+      <button onclick="showConfirmation()">Next</button>
+    </div>
+    </div>
+
+    <div id="confirmation" style="display:none">
+      <br><br>
+      <label id="passengerID">Passenger:</label><br><br>
+      <label id="flightID">Flight:</label><br><br>
+      <label for="bags">How many bags?:</label>
+      <input type="number" name="bags" id="numbags" min="0" max="10"><br><br> 
+
+      <div class="btn-group">
+      <button onclick="back()">Back</button>
+      <button onclick="createTrip()">Confirm</button>
+    </div>
+    </div>
+
+    <div id="confirmed" style="display:none">
+        <br><br>
+        <label >Congrats, your flight has been created!</label>
+        <br>
+        <button onclick="google.script.run.withSuccessHandler(changePage).newPage('BookFlight')">Back</button>
+
+    </div>
+    
+    <br><br><br>
+    <button onclick="google.script.run.withSuccessHandler(changePage).newPage('Index')">Logout</button>
+    
+  </body>
+
+</html>
